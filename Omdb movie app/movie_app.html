@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies Info...</title>
+  <style>
+    input{
+      margin-left: 35%;
+      width: 40%;
+      height: 30px;
+      text-align: center;
+      background-color: rgb(136, 224, 27);
+      font-weight: bolder;
+      border-radius: 10px;
+    }
+    button{
+      margin-left: 45%;
+      margin-top: 10px;
+      width: 20%;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background-color: rgb(179, 128, 228);
+      font-weight: bolder;
+    }
+    #container1{
+      margin: auto;
+      margin-left: 27%;
+      width: 40%;
+    }
+    #container2{
+      margin: auto;
+      margin-left: 30%;
+      width: 40%;
+    }
+    p{
+      text-align: center;
+      font-weight: bolder;
+    }
+    #container2>img{
+      width: 100%;
+    }
+    img{
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container1">
+    <input id="movie_name" type="text" placeholder="Please Enter movies Name">
+    <br>
+    <button onclick="findMovie()" id="movie_info">Click to find movie info..</button>
+  </div>
+  <div id="container2">
+    <p id="Actors"></p>
+    <p id="Director"></p>
+    <p id="Title"></p>
+    <p id="Rating"></p>
+    <p id="Released"></p>
+    <img id="Poster" src="" alt="">
+  </div>
+</body>
+</html>
+<script>
+  let container1=document.getElementById("container1");
+  let container2=document.getElementById("container2");
+  function findMovie(){
+    let movie_name=document.getElementById("movie_name").value;
+    fetch(`http://www.omdbapi.com/?apikey=f760efb4&t=${movie_name}`)
+    .then(res=>{
+      return res.json();
+    })
+    .then(res=>{
+      console.log(res);
+      displayMovie(res);
+    })
+    .catch(()=>{
+      console.log("Please Enter a valid movie name");
+    })
+  }
+  function displayMovie(res){
+    document.getElementById("Actors").innerText=`Actors: ${res.Actors}`;    
+    document.getElementById("Director").innerText=`Director: ${res.Director}`;   
+    document.getElementById("Title").innerText=`Title: ${res.Title}`    
+    document.getElementById("Released").innerText=`Released: ${res.Released}`;   
+    document.getElementById("Rating").innerText=`Rating [Source: ${res.Ratings[0].Source} Value:${res.Ratings[0].Value}]`
+    document.getElementById("Poster").src=res.Poster;
+  }
+</script>
